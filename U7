@@ -1,0 +1,56 @@
+<?php
+$servername = "localhost";
+$username = "root";
+$password = "";
+/**
+ * @autor Castillo Canizales Carlos Ernesto
+ * @program BASE DE DATOS 1
+ */
+try {
+  $conn = new PDO("mysql:host=$servername;dbname=mydata", $username, $password);
+  // set the PDO error mode to exception
+  $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+  $sql = "SELECT ordenes.id_orden,ordenes.id_cliente,clientes.nombre as nombre_cliente,clientes.apellido_paterno,clientes.apellido_materno,".
+  "ordenes.id_producto, productos.nombre as nombre_producto, productos.descripcion,".
+  "ordenes.cantidad,productos.precio,productos.sku, ordenes.fecha FROM ordenes JOIN productos ON ordenes.id_producto = productos.id_producto JOIN clientes ON clientes.id_cliente = ordenes.id_cliente;";
+ // echo "Connected successfully";
+  echo "<h3>ALUMNO: Castillo Canizales Carlos Ernesto</h3>";
+  echo "<h3>MATERIA: BASE DE DATOS 1</h3>";
+  $table = "<table>";
+  $table = $table . '<thead>'.
+   ' <thead>'.
+        '<tr>'.
+            '<th>ID ORDEN </th>'.
+            '<th>ID CLIENTE </th>'.
+            '<th>CLIENTE </th>'.
+            '<th>ID PRODUCTO </th>'.
+            '<th>PRODUCTO </th>'.
+            '<th>DESCRIPCION </th>'.
+            '<th>CANTIDAD </th>'.
+            '<th>PRECIO </th>'.
+            '<th>SKU </th>'.
+            '<th>FECHA </th>'.
+        '<tr>'.
+   ' </thead>'.
+   ' <tbody>';
+  foreach ($conn->query($sql) as $row) {
+    $table = $table . '<tr>'.
+             "<td>".$row['id_orden'] . "</td>".
+             "<td>".$row['id_cliente'] . "</td>".
+             "<td>".$row['nombre_cliente'] ." ".$row['apellido_paterno']. " " .$row['apellido_materno']."</td>".
+             "<td>".$row['id_producto'] . "</td>".
+             "<td>".$row['nombre_producto'] . "</td>".
+             "<td>".$row['descripcion'] . "</td>".
+             "<td>".$row['cantidad'] . "</td>".
+             "<td>".$row['precio'] . "</td>".
+             "<td>".$row['sku'] . "</td>".
+             "<td>".$row['fecha'] . "</td>".
+            '</tr>' 
+             ;
+  }
+$table = $table .  '</tbody></table>';
+echo $table;
+} catch(PDOException $e) {
+  echo "Connection failed: " . $e->getMessage();
+}
+?>
